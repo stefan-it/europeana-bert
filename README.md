@@ -27,7 +27,7 @@ training corpus. The following figure shows a detailed overview (tokens per year
 
 ## Pretraining
 
-We the awesome 🤗 / Tokenizers library for building the BERT-compatible vocab (32,000 subwords).
+We use the awesome 🤗 / Tokenizers library for building the BERT-compatible vocab (32,000 subwords).
 
 We use the same preprocessing steps and training parameters as for our (upcoming) Turkish BERT model.
 A cheatsheet can be found [here](https://github.com/stefan-it/turkish-bert/blob/master/CHEATSHEET.md).
@@ -36,7 +36,7 @@ A cheatsheet can be found [here](https://github.com/stefan-it/turkish-bert/blob/
 
 We mainly compare our cased and uncased models against the NER dataset, that is used in the following
 two papers:
-Padó
+
 * [A Named Entity Recognition Shootout for German](https://www.aclweb.org/anthology/P18-2020/)
   by Riedl and Padó
 * [Towards Robust Named Entity Recognition for Historic German](https://www.aclweb.org/anthology/W19-4312/)
