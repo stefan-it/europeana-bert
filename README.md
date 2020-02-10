@@ -3,7 +3,7 @@
 In this repository we open source BERT models trained on various Europeana newspapers.
 
 Notice: We use the open source [Europeana newspapers](http://www.europeana-newspapers.eu/)
-that we provided by *The European Library*. However, the *The European Library* was permanently
+that were provided by *The European Library*. However, *The European Library* was permanently
 shut down (end of 2019) and thus all direct download links are no longer working.
 We are working on providing an alternative download mirror.
 
