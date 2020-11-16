@@ -1,5 +1,7 @@
 # Europeana BERT and ELECTRA models
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4275044.svg)](https://doi.org/10.5281/zenodo.4275044)
+
 In this repository we open source BERT and ELECTRA models trained on various Europeana newspapers.
 
 Notice: We use the open source [Europeana newspapers](http://www.europeana-newspapers.eu/)
@@ -192,6 +194,23 @@ All models are available on the [Huggingface model hub](https://huggingface.co/d
 
 For questions about our Europeana BERT and ELECTRA models just open an issue
 [here](https://github.com/stefan-it/europeana-bert/issues) 🤗
+
+# Citation
+
+You can use the following BibTeX entry for citation:
+
+```bibtex
+@software{stefan_schweter_2020_4275044,
+  author       = {Stefan Schweter},
+  title        = {Europeana BERT and ELECTRA models},
+  month        = nov,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {1.0.0},
+  doi          = {10.5281/zenodo.4275044},
+  url          = {https://doi.org/10.5281/zenodo.4275044}
+}
+```
 
 # Acknowledgments
 
