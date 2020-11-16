@@ -180,6 +180,10 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModel.from_pretrained(model_name)
 ```
 
+# License
+
+All models are licensed under [MIT](LICENSE).
+
 # Huggingface model hub
 
 All models are available on the [Huggingface model hub](https://huggingface.co/dbmdz).
