@@ -9,13 +9,13 @@ We are working on providing an alternative download mirror.
 
 # Changelog
 
+* 16.11.2020: Public release of French Europeana BERT and ELECTRA models
 * 26.07.2020: Public release of German Europeana ELECTRA model
 * 10.02.2020: Initial version of this repo
 
 # German Europeana newspapers
 
 We extracted all German texts using the `language` metadata attribute from the Europeana corpus.
-
 
 ## Stats
 
@@ -120,6 +120,64 @@ from transformers import AutoModel, AutoTokenizer
 
 tokenizer = AutoTokenizer.from_pretrained("dbmdz/electra-base-german-europeana-cased-discriminator")
 model = AutoModel.from_pretrained("dbmdz/electra-base-german-europeana-cased-discriminator")
+```
+
+# French Europeana newspapers
+
+We also extracted all French texts using the `language` metadata attribute from the Europeana corpus.
+
+## Stats
+
+The resulting corpus has a size of 63GB and consists of 11,052,528,456 tokens.
+
+Based on the metadata information, texts from the 18th - 20th century are mainly included in the
+training corpus. The following figure shows a detailed overview (tokens per year):
+
+![Tokens per year for French Europeana training corpus](french_year_token_stats.png)
+
+## Pretraining
+
+We use the awesome 🤗 / Tokenizers library for building the BERT-compatible vocab (32,000 subwords).
+
+We use the same preprocessing steps and training parameters as for our Turkish BERT and ELECTRA models.
+A cheatsheet for can be found [here for BERT](https://github.com/stefan-it/turkish-bert/blob/master/CHEATSHEET.md),
+and [here for ELECTRA](https://github.com/stefan-it/turkish-bert/blob/master/electra/CHEATSHEET.md).
+
+## Model weights
+
+Both BERT and ELECTRA model weights for PyTorch and TensorFlow are available.
+
+As ELECTRA is trainined with an generator and discriminator model, both models are available. The generator model is usually used for masked
+language modeling, whereas the discriminator model is used for fine-tuning on downstream tasks like token or sequence classification.
+
+The following model names can be used:
+
+* French Europeana BERT: `dbmdz/bert-base-french-europeana-cased` - [model hub page](https://huggingface.co/dbmdz/bert-base-french-europeana-cased/tree/main)
+* French Europeana ELECTRA (discriminator): `dbmdz/electra-base-french-europeana-cased-discriminator` - [model hub page](https://huggingface.co/dbmdz/electra-base-french-europeana-cased-discriminator/tree/main)
+* French Europeana ELECTRA (generator): `dbmdz/electra-base-french-europeana-cased-generator` - [model hub page](https://huggingface.co/dbmdz/electra-base-french-europeana-cased-generator/tree/main)
+
+## Usage
+
+All BERT and ELECTRA models are located on the 🤗 / model hub and can be loaded like:
+
+```python
+from transformers import AutoModel, AutoTokenizer
+
+model_name = "dbmdz/bert-base-french-europeana-cased"
+
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name)
+```
+
+The ELECTRA (discriminator) model can be used with:
+
+```python
+from transformers import AutoModel, AutoTokenizer
+
+model_name = "dbmdz/electra-base-french-europeana-cased-discriminator"
+
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name)
 ```
 
 # Huggingface model hub
