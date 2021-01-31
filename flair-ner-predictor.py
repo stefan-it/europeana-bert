@@ -4,6 +4,8 @@ import sys
 
 from typing import List
 
+from flair import set_seed
+
 from flair.data import Sentence
 from flair.datasets import ColumnCorpus
 from flair.embeddings import (
@@ -15,19 +17,6 @@ from flair.models import SequenceTagger
 from flair.trainers import ModelTrainer
 
 
-
-# Convert IOBES to IOB for CoNLL evaluations script
-def iobes_to_iob(tag):
-    iob_tag = tag
-
-    if tag.startswith("S-"):
-        iob_tag = tag.replace("S-", "B-")
-
-    if tag.startswith("E-"):
-        iob_tag = tag.replace("E-", "I-")
-
-    return iob_tag
-
 @click.command()
 @click.option("--data_folder", required=True, type=str, help="Should point to ./data/")
 @click.option("--task_name", required=True, type=str, help="Should be lft or onb")
@@ -37,51 +26,53 @@ def run_experiment(data_folder, task_name, model_name, split):
     # Adjust logging level
     logging.getLogger("flair").setLevel(level="ERROR")
 
-    # Configuration
-    column_format = {0: "token", 1: "ner"}
+    set_seed(1)
 
-    # We use official data from Riedl and Padó
-    train_file = f"enp_DE.{task_name}.mr.tok.train.bio"
-    dev_file = f"enp_DE.{task_name}.mr.tok.dev.bio"
-    test_file = f"enp_DE.{task_name}.mr.tok.test.bio"
+    if task_name in ["lft", "onb"]:
+        # Configuration
+        column_format = {0: "token", 1: "ner"}
 
-    # Corpus
-    corpus = ColumnCorpus(data_folder=data_folder,
-                          column_format=column_format,
-                          train_file=train_file,
-                          dev_file=dev_file,
-                          test_file=test_file,
-                          tag_to_bioes="ner",
-                          )
+        # We use official data from Riedl and Padó
+        train_file = f"enp_DE.{task_name}.mr.tok.train.bio"
+        dev_file = f"enp_DE.{task_name}.mr.tok.dev.bio"
+        test_file = f"enp_DE.{task_name}.mr.tok.test.bio"
 
-    # Corpus configuration
-    tag_type = "ner"
-    tag_dictionary = corpus.make_tag_dictionary(tag_type=tag_type)
+
+        # Corpus
+        corpus = ColumnCorpus(data_folder=data_folder,
+                              column_format=column_format,
+                              train_file=train_file,
+                              dev_file=dev_file,
+                              test_file=test_file,
+                              tag_to_bioes="ner",
+                             )
 
     tagger: SequenceTagger = SequenceTagger.load(model_name)
-   
+
     ds = corpus.test if split == "test" else corpus.dev
 
     for sentence in ds:
-        tokens = sentence.tokens
-        gold_labels = [token.get_tag('ner').value for token in sentence.tokens]
+        tagger.predict(sentence, label_name="predicted")
 
-        tagged_sentence = Sentence()
-        tagged_sentence.tokens = tokens
+        gold_spans = sentence.get_spans("ner")
 
-        tagger.predict(tagged_sentence)
+        pred_spans = sentence.get_spans("predicted")
 
-        predicted_labels = [token.get_tag('ner').value for token in tagged_sentence.tokens]
+        for token in sentence:
+            gold_tag = "O"
 
-        assert len(tokens) == len(gold_labels)
-        assert len(gold_labels) == len(predicted_labels)
+            for span in gold_spans:
+                if token in span:
+                    gold_tag = "B-" + span.tag if token == span[0] else "I-" + span.tag
 
-        for token, gold_label, predicted_label in zip(tokens, gold_labels, predicted_labels):
-            gold_label = iobes_to_iob(gold_label)
-            predicted_label = iobes_to_iob(predicted_label)
+            pred_tag = "O"
 
-            print(f"{token.text} {gold_label} {predicted_label}")
-        
+            for span in pred_spans:
+                if token in span:
+                    pred_tag = "B-" + span.tag if token == span[0] else "I-" + span.tag
+
+            print(f"{token.text} {gold_tag} {pred_tag}")
+
         print("")
 
 if __name__ == "__main__":
