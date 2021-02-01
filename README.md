@@ -92,6 +92,7 @@ Results on the development set in brackets:
 | German Europeana BERT (base, uncased)     | (86.74) / 84.18 | (86.84) / 82.88 | (86.19) / 83.89 | (86.87) / 84.54 | (86.50) / 84.72 | (86.63) / 84.04 ± 0.65
 | German Europeana ELECTRA (base, cased)    | (88.09) / 86.75 | (87.72) / 85.35 | (86.86) / 84.63 | (87.75) / 86.38 | (87.93) / 86.05 | (87.67) / 85.83 ± 0.76
 | German Europeana DistilBERT (base, cased) | (89.29) / 85.11 | (87.86) / 85.68 | (87.68) / 86.29 | (87.22) / 86.65 | (88.04) / 87.74 | (88.02) / **86.29** ± 0.89
+| German Europeana ELECTRA (large, cased)   | (88.84) / 86.45 | (88.89) / 88.14 | (88.49) / 87.42 | (89.99) / 85.94 | (88.57) / 86.52 | (88.96) / **86.89** ± 0.78
 
 The current SOTA reported by Schweter and Baiter is 85.31%.
 
