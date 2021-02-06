@@ -71,7 +71,7 @@ def run_experiment(data_folder, task_name, model_name, run_id, use_context):
     trainer: ModelTrainer = ModelTrainer(tagger, corpus)
 
     trainer.train(
-        f"resources/taggers/pos-{task_name}-{model_name}-context{use_context}-{run_id}",
+        f"resources/taggers/ner-{task_name}-{model_name}-context{use_context}-{run_id}",
         learning_rate=0.1,
         mini_batch_size=16,
         max_epochs=200,
