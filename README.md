@@ -157,8 +157,8 @@ All models are available on the [Huggingface model hub](https://huggingface.co/d
 
 # Contact (Bugs, Feedback, Contribution and more)
 
-For questions about our Europeana BERT and ELECTRA models just open an issue
-[here](https://github.com/stefan-it/europeana-bert/issues) 🤗
+For questions about our Europeana BERT, ELECTRA and ConvBERT models just open a new discussion
+[here](https://github.com/stefan-it/europeana-bert/discussions) 🤗
 
 # Citation
 
