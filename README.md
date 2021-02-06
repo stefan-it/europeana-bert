@@ -15,6 +15,14 @@ We are working on providing an alternative download mirror.
 * 26.07.2020: Public release of German Europeana ELECTRA model
 * 10.02.2020: Initial version of this repo
 
+# Model types
+
+We trained different models, that are described in more detail in the following papers:
+
+* [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805)
+* [ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators](https://arxiv.org/abs/2003.10555)
+* [ConvBERT: Improving BERT with Span-based Dynamic Convolution](https://arxiv.org/abs/2008.02496)
+
 # German Europeana newspapers
 
 We extracted all German texts using the `language` metadata attribute from the Europeana corpus.
@@ -75,6 +83,7 @@ Results on the development set in brackets:
 | German Europeana ELECTRA (base, cased)    | (80.76) / 81.86 | (80.42) / 81.12 | (80.35) / 81.28 | (80.37) / 81.49 | (79.95) / 80.72 | (80.37) / 81.26 ± 0.38
 | German Europeana DistilBERT (base, cased) | (77.87) / 77.69 | (77.75) / 77.33 | (77.70) / 77.46 | (78.63) / 77.56 | (78.10) / 78.60 | (78.01) / 77.73 ± 0.45
 | German Europeana ELECTRA (large, cased)   | (81.89) / 83.41 | (81.49) / 82.61 | (81.52) / 83.48 | (81.42) / 81.99 | (81.84) / 82.53 | (81.63) / **82.80** ± 0.57
+| German Europeana ConvBERT (base, cased)   | (81.06) / 82.06 | (81.15) / 81.66 | (80.69) / 81.77 | (81.61) / 81.74 | (81.06) / 81.55 | (81.11) / 81.76 ± 0.17
 
 The current SOTA reported by Schweter and Baiter is 77.51%.
 
@@ -91,42 +100,23 @@ Results on the development set in brackets:
 | German Europeana BERT (base, cased)       | (88.60) / 85.39 | (87.77) / 85.42 | (88.76) / 86.41 | (88.36) / 86.04 | (88.49) / 85.86 | (88.40) / 85.82 ± 0.39
 | German Europeana BERT (base, uncased)     | (86.74) / 84.18 | (86.84) / 82.88 | (86.19) / 83.89 | (86.87) / 84.54 | (86.50) / 84.72 | (86.63) / 84.04 ± 0.65
 | German Europeana ELECTRA (base, cased)    | (88.09) / 86.75 | (87.72) / 85.35 | (86.86) / 84.63 | (87.75) / 86.38 | (87.93) / 86.05 | (87.67) / 85.83 ± 0.76
-| German Europeana DistilBERT (base, cased) | (89.29) / 85.11 | (87.86) / 85.68 | (87.68) / 86.29 | (87.22) / 86.65 | (88.04) / 87.74 | (88.02) / **86.29** ± 0.89
+| German Europeana DistilBERT (base, cased) | (89.29) / 85.11 | (87.86) / 85.68 | (87.68) / 86.29 | (87.22) / 86.65 | (88.04) / 87.74 | (88.02) / 86.29 ± 0.89
 | German Europeana ELECTRA (large, cased)   | (88.84) / 86.45 | (88.89) / 88.14 | (88.49) / 87.42 | (89.99) / 85.94 | (88.57) / 86.52 | (88.96) / **86.89** ± 0.78
+| German Europeana ConvBERT (base, cased)   | (89.31) / 87.89 | (89.18) / 85.71 | (88.97) / 86.16 | (90.10) / 85.75 | (87.80) / 85.86 | (89.07) / 86.27 ± 0.82
 
 The current SOTA reported by Schweter and Baiter is 85.31%.
 
 Notice: The ONB dataset covers texts from 1710 - 1873. The Europeana training dataset only contains little data for this specific
 time period. We are currently working on BERT models with other training data for this period!
 
-## Usage
+## Model weights
 
-Both cased and uncased BERT models are located on the 🤗 / model hub and can be loaded like:
+Most of the pre-trained models are located on the 🤗 / model hub:
 
-```python
-from transformers import AutoModel, AutoTokenizer
-
-tokenizer = AutoTokenizer.from_pretrained("dbmdz/bert-base-german-europeana-cased")
-model = AutoModel.from_pretrained("dbmdz/bert-base-german-europeana-cased")
-```
-
-The uncased model can be loaded like:
-
-```python
-from transformers import AutoModel, AutoTokenizer
-
-tokenizer = AutoTokenizer.from_pretrained("dbmdz/bert-base-german-europeana-uncased")
-model = AutoModel.from_pretrained("dbmdz/bert-base-german-europeana-uncased")
-```
-
-The ELECTRA model can be loaded with:
-
-```python
-from transformers import AutoModel, AutoTokenizer
-
-tokenizer = AutoTokenizer.from_pretrained("dbmdz/electra-base-german-europeana-cased-discriminator")
-model = AutoModel.from_pretrained("dbmdz/electra-base-german-europeana-cased-discriminator")
-```
+* [German Europeana BERT (base, cased)](https://huggingface.co/dbmdz/bert-base-german-europeana-cased)
+* [German Europeana BERT (base, uncased)](https://huggingface.co/dbmdz/bert-base-german-europeana-uncased)
+* [German Europeana ELECTRA (base, cased, discriminator)](https://huggingface.co/dbmdz/electra-base-german-europeana-cased-discriminator)
+* [German Europeana ELECTRA (base, cased, generator)](https://huggingface.co/dbmdz/electra-base-german-europeana-cased-generator)
 
 # French Europeana newspapers
 
@@ -153,38 +143,9 @@ and [here for ELECTRA](https://github.com/stefan-it/turkish-bert/blob/master/ele
 
 Both BERT and ELECTRA model weights for PyTorch and TensorFlow are available.
 
-As ELECTRA is trainined with an generator and discriminator model, both models are available. The generator model is usually used for masked
-language modeling, whereas the discriminator model is used for fine-tuning on downstream tasks like token or sequence classification.
-
-The following model names can be used:
-
 * French Europeana BERT: `dbmdz/bert-base-french-europeana-cased` - [model hub page](https://huggingface.co/dbmdz/bert-base-french-europeana-cased/tree/main)
 * French Europeana ELECTRA (discriminator): `dbmdz/electra-base-french-europeana-cased-discriminator` - [model hub page](https://huggingface.co/dbmdz/electra-base-french-europeana-cased-discriminator/tree/main)
 * French Europeana ELECTRA (generator): `dbmdz/electra-base-french-europeana-cased-generator` - [model hub page](https://huggingface.co/dbmdz/electra-base-french-europeana-cased-generator/tree/main)
-
-## Usage
-
-All BERT and ELECTRA models are located on the 🤗 / model hub and can be loaded like:
-
-```python
-from transformers import AutoModel, AutoTokenizer
-
-model_name = "dbmdz/bert-base-french-europeana-cased"
-
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModel.from_pretrained(model_name)
-```
-
-The ELECTRA (discriminator) model can be used with:
-
-```python
-from transformers import AutoModel, AutoTokenizer
-
-model_name = "dbmdz/electra-base-french-europeana-cased-discriminator"
-
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModel.from_pretrained(model_name)
-```
 
 # License
 
