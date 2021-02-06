@@ -11,7 +11,7 @@ We are working on providing an alternative download mirror.
 
 # Changelog
 
-* 06.02.2020: Public release of German Europeana ConvBERT model
+* 06.02.2020: Public release of German Europeana DistilBERT and ConvBERT models
 * 16.11.2020: Public release of French Europeana BERT and ELECTRA models
 * 26.07.2020: Public release of German Europeana ELECTRA model
 * 10.02.2020: Initial version of this repo
@@ -23,6 +23,7 @@ We trained different models, that are described in more detail in the following 
 * [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805)
 * [ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators](https://arxiv.org/abs/2003.10555)
 * [ConvBERT: Improving BERT with Span-based Dynamic Convolution](https://arxiv.org/abs/2008.02496)
+* [DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter](https://arxiv.org/abs/1910.01108)
 
 # German Europeana newspapers
 
@@ -44,6 +45,13 @@ We use the awesome 🤗 / Tokenizers library for building the BERT-compatible vo
 We use the same preprocessing steps and training parameters as for our Turkish BERT and ELECTRA models.
 A cheatsheet for can be found [here for BERT](https://github.com/stefan-it/turkish-bert/blob/master/CHEATSHEET.md),
 and [here for ELECTRA](https://github.com/stefan-it/turkish-bert/blob/master/electra/CHEATSHEET.md).
+
+The ConvBERT model was trained with the [reference implementation](https://github.com/yitu-opensource/ConvBert)
+on a v3-8 TPU with a maximum sequence length of 512 over the complete training corpus for 1M steps.
+
+For the DistilBERT model, only 6GB of the original training data (51GB) was used. The model was trained for
+two epochs with the [reference implementation](https://github.com/huggingface/transformers/tree/master/examples/research_projects/distillation)
+from Transformers on 4 RTX 3090 with a batch size of 6.
 
 ## Results
 
@@ -119,6 +127,7 @@ Most of the pre-trained models are located on the 🤗 / model hub:
 * [German Europeana ELECTRA (base, cased, discriminator)](https://huggingface.co/dbmdz/electra-base-german-europeana-cased-discriminator)
 * [German Europeana ELECTRA (base, cased, generator)](https://huggingface.co/dbmdz/electra-base-german-europeana-cased-generator)
 * [German Europeana ConvBERT (base. cased)](https://huggingface.co/dbmdz/convbert-base-german-europeana-cased)
+* [German Europeana DistilBERT (base, cased)](https://huggingface.co/dbmdz/distilbert-base-german-europeana-cased)
 
 # French Europeana newspapers
 
