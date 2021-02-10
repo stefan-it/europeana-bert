@@ -11,7 +11,7 @@ We are working on providing an alternative download mirror.
 
 # Changelog
 
-* 06.02.2020: Public release of German Europeana DistilBERT and ConvBERT models
+* 06.02.2021: Public release of German Europeana DistilBERT and ConvBERT models
 * 16.11.2020: Public release of French Europeana BERT and ELECTRA models
 * 26.07.2020: Public release of German Europeana ELECTRA model
 * 10.02.2020: Initial version of this repo
