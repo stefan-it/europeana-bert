@@ -1,0 +1,15 @@
+{
+    "seeds": [1],
+    "batch_sizes": [8, 16],
+    "hf_model": "deepset/gbert-base",
+    "context_size": 0,
+    "epochs": [1,5,10],
+    "learning_rates": [1e-5, 3e-5, 5e-5],
+    "data_folder": "./data",
+    "train_file": "enp_DE.onb.mr.tok.train.bio",
+    "dev_file": "enp_DE.onb.mr.tok.dev.bio",
+    "test_file": "enp_DE.onb.mr.tok.test.bio",
+    "task_name": "onb",
+    "cuda": "0"
+}
+
