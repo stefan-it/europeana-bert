@@ -11,6 +11,7 @@ We are working on providing an alternative download mirror.
 
 # Changelog
 
+* 25.07.2021: Add fine-tuned evaluations results for various models
 * 06.02.2021: Public release of German Europeana DistilBERT and ConvBERT models
 * 16.11.2020: Public release of French Europeana BERT and ELECTRA models
 * 26.07.2020: Public release of German Europeana ELECTRA model
@@ -71,49 +72,101 @@ Embeddings (stacked with Word Embeddings) resulting in the current SOTA for thes
 
 We use the awesome Flair library for experiments with our Transformer-based models.
 It nicely wraps the outstanding 🤗 Transformers library and we can also use the
-HuggingFace model hub. For training our NER models we use the `flair-ner-trainer.py` script and `flair-ner-predictor.py`
-for predicting and piping the output to the CoNLL-2003 evaluation script.
+HuggingFace model hub. 
+
+We evaluate both feature-based and fine-tuned NER models. For the feature-based approach we use the mean over all layers from the
+Transformer model. We use an initial learning rate of 0.1. Then we reduce the learning rate by a factor of 0.5 with a patience of
+3. This factor determines the number of epochs with no improvement after which learning rate will be reduced. We use a batch size of 16
+for training feature-based models and use different seeds for training 5 models. Averaged F1-score is then calculated.
+
+For the fine-tuned models we perform a hyper-parameter search over:
+
+* `batch_size`: [8, 16]
+* `epochs`: [1, 5, 10]
+* `learning_rates`: [1e-5, 3e-5, 5e-5]
+
+Then we choose the best hyper-parameter configuration and train 5 models with different seeds and average F1-score over these models.
+
+For training our feature-based NER models we use the `flair-ner-trainer.py` script and `flair-ner-predictor.py`
+for predicting and piping the output to the CoNLL-2003 evaluation script. We use `flair-ner-trainer-ft.py` for fine-tuning, with all
+necessary configuration files located in the `configs` folder of this repository.
 
 Please star and watch [Flair](https://github.com/flairNLP/flair) and [Transformers](https://github.com/huggingface/transformers)
 on GitHub!
 
 ### LFT (1926)
 
-We measure averaged F-score over 5 runs using the official [CoNLL-2003 evaluation script](https://www.clips.uantwerpen.be/conll2003/ner/bin/conlleval).
-Results on the development set in brackets:
+#### Feature-based evaluation
 
-| Model                                     | Run 1           | Run 2           | Run 3           | Run 4           | Run 5           | Avg.
-| ----------------------------------------- | --------------- | --------------- | --------------- | --------------- | --------------- | --------------------------
-| mBERT (base, cased)                       | (74.99) / 76.71 | (75.65) / 77.02 | (76.65) / 78.04 | (74.93) / 78.15 | (75.52) / 77.61 | (75.55) / 77.51 ± 0.56
-| German DBMDZ Bert (base, cased)           | (75.61) / 77.14 | (76.79) / 78.74 | (75.42) / 77.70 | (76.23) / 77.61 | (75.58) / 78.07 | (78.93) / 77.85 ± 0.53
-| XLM-R (large, cased)                      | (77.04) / 76.35 | (76.03) / 74.80 | (77.62) / 75.23 | (76.60) / 74.87 | (76.78) / 76.11 | (76.81) / 75.48 ± 0.64
-| German Europeana BERT (base, cased)       | (78.75) / 78.81 | (78.59) / 79.88 | (79.28) / 78.87 | (79.55) / 78.15 | (79.42) / 78.20 | (79.12) / 78.78 ± 0.62
-| German Europeana BERT (base, uncased)     | (76.96) / 76.83 | (76.16) / 74.62 | (75.63) / 74.77 | (76.53) / 75.83 | (76.47) / 77.07 | (76.35) / 75.82 ± 1.04
-| German Europeana ELECTRA (base, cased)    | (80.76) / 81.86 | (80.42) / 81.12 | (80.35) / 81.28 | (80.37) / 81.49 | (79.95) / 80.72 | (80.37) / 81.26 ± 0.38
-| German Europeana DistilBERT (base, cased) | (77.87) / 77.69 | (77.75) / 77.33 | (77.70) / 77.46 | (78.63) / 77.56 | (78.10) / 78.60 | (78.01) / 77.73 ± 0.45
-| German Europeana ELECTRA (large, cased)   | (81.89) / 83.41 | (81.49) / 82.61 | (81.52) / 83.48 | (81.42) / 81.99 | (81.84) / 82.53 | (81.63) / **82.80** ± 0.57
-| German Europeana ConvBERT (base, cased)   | (81.06) / 82.06 | (81.15) / 81.66 | (80.69) / 81.77 | (81.61) / 81.74 | (81.06) / 81.55 | (81.11) / 81.76 ± 0.17
+| Model                    | Development F1-score | Test F1-score
+| ------------------------ | -------------------- | -----------------
+| DBMDZ German BERT        | 75.926 ± 0.57        | 77.852 ± 0.60
+| Europeana BERT (cased)   | 79.118 ± 0.42        | 78.782 ± 0.70
+| Europeana BERT (uncased) | 76.350 ± 0.49        | 75.824 ± 1.13
+| Europeana ConvBERT       | **81.114** ± 0.33    | **81.756** ± 0.19
+| Europeana DistilBERT     | 78.010 ± 0.38        | 77.728 ± 0.51
+| Europeana ELECTRA        | 80.370 ± 0.29        | 81.294 ± 0.42
+| XLM-R (base)             | 76.814 ± 0.58        | 75.472 ± 0.72
+| mBERT (cased)            | 75.548 ± 0.69        | 77.506 ± 0.63
 
-The current SOTA reported by Schweter and Baiter is 77.51%.
+![LFT Feature-based Development Results](figures/lft_fb_dev.png)
+![LFT Feature-based Test Results](figures/lft_fb_test.png)
+
+#### Fine-based evaluation
+
+| Model                    | Development F1-score | Test F1-score
+| ------------------------ | -------------------- | -----------------
+| DBMDZ German BERT        | 77.336 ± 0.53        | 77.544 ± 0.72
+| Europeana BERT (cased)   | 79.278 ± 0.60        | 79.734 ± 0.85
+| Europeana BERT (uncased) | 76.938 ± 0.53        | 77.984 ± 0.97
+| Europeana ConvBERT       | **80.550** ± 0.44    | **81.352** ± 1.54
+| Europeana DistilBERT     | 79.086 ± 0.54        | 77.606 ± 1.31
+| Europeana ELECTRA        | 79.914 ± 0.87        | 81.062 ± 0.80
+| GBERT (base)             | 76.984 ± 0.42        | 76.826 ± 0.47
+| XLM-R (base)             | 76.142 ± 0.46        | 75.898 ± 0.55
+| mBERT (cased)            | 77.804 ± 0.66        | 78.362 ± 0.74
+
+![LFT Fine-tuned Development Results](figures/lft_ft_dev.png)
+![LFT Fine-tuned Test Results](figures/lft_ft_test.png)
+
+The current SOTA reported by Schweter and Baiter is 77.51% on test set.
 
 ### ONB (1710 - 1873)
 
-We measure averaged F-score over 5 runs using the official [CoNLL-2003 evaluation script](https://www.clips.uantwerpen.be/conll2003/ner/bin/conlleval).
-Results on the development set in brackets:
+#### Feature-based evaluation
 
-| Model                                     | Run 1           | Run 2           | Run 3           | Run 4           | Run 5           | Avg.
-| ----------------------------------------- | --------------- | --------------- | --------------- | --------------- | --------------- | --------------------------
-| mBERT (base, cased)                       | (82.06) / 80.81 | (82.24) / 77.61 | (82.64) / 81.95 | (83.21) / 83.38 | (82.25) / 82.07 | (82.48) / 81.16 ± 1.95
-| German DBMDZ Bert (base, cased)           | (84.44) / 84.35 | (84.70) / 83.49 | (84.26) / 82.34 | (85.64) / 80.47 | (85.19) / 83.79 | (84.85) / 82.89 ± 1.38
-| XLM-R (large, cased)                      | (82.16) / 81.64 | (82.45) / 80.64 | (83.70) / 81.63 | (82.68) / 80.85 | (81.76) / 80.74 | (82.55) / 81.10 ± 0.44
-| German Europeana BERT (base, cased)       | (88.60) / 85.39 | (87.77) / 85.42 | (88.76) / 86.41 | (88.36) / 86.04 | (88.49) / 85.86 | (88.40) / 85.82 ± 0.39
-| German Europeana BERT (base, uncased)     | (86.74) / 84.18 | (86.84) / 82.88 | (86.19) / 83.89 | (86.87) / 84.54 | (86.50) / 84.72 | (86.63) / 84.04 ± 0.65
-| German Europeana ELECTRA (base, cased)    | (88.09) / 86.75 | (87.72) / 85.35 | (86.86) / 84.63 | (87.75) / 86.38 | (87.93) / 86.05 | (87.67) / 85.83 ± 0.76
-| German Europeana DistilBERT (base, cased) | (89.29) / 85.11 | (87.86) / 85.68 | (87.68) / 86.29 | (87.22) / 86.65 | (88.04) / 87.74 | (88.02) / 86.29 ± 0.89
-| German Europeana ELECTRA (large, cased)   | (88.84) / 86.45 | (88.89) / 88.14 | (88.49) / 87.42 | (89.99) / 85.94 | (88.57) / 86.52 | (88.96) / **86.89** ± 0.78
-| German Europeana ConvBERT (base, cased)   | (89.31) / 87.89 | (89.18) / 85.71 | (88.97) / 86.16 | (90.10) / 85.75 | (87.80) / 85.86 | (89.07) / 86.27 ± 0.82
+| Model                    | Development F1-score | Test F1-score
+| ------------------------ | -------------------- | -----------------
+| DBMDZ German BERT        | 84.846 ± 0.57        | 82.888 ± 1.54
+| Europeana BERT (cased)   | 88.396 ± 0.38        | 85.824 ± 0.43
+| Europeana BERT (uncased) | 86.628 ± 0.28        | 84.042 ± 0.72
+| Europeana ConvBERT       | **89.072** ± 0.83    | 86.274 ± 0.92
+| Europeana DistilBERT     | 88.018 ± 0.77        | **86.294** ± 1.00
+| Europeana ELECTRA        | 87.670 ± 0.48        | 85.832 ± 0.85
+| XLM-R (base)             | 82.550 ± 0.73        | 81.100 ± 0.49
+| mBERT (cased)            | 82.480 ± 0.46        | 81.164 ± 2.19
 
-The current SOTA reported by Schweter and Baiter is 85.31%.
+![ONB Feature-based Development Results](figures/onb_fb_dev.png)
+![ONB Feature-based Test Results](figures/onb_fb_test.png)
+
+#### Fine-based evaluation
+
+| Model                    | Development F1-score | Test F1-score
+| ------------------------ | -------------------- | -----------------
+| DBMDZ German BERT        | 84.490 ± 0.57        | 82.966 ± 0.56
+| Europeana BERT (cased)   | 87.198 ± 0.40        | 85.282 ± 0.82
+| Europeana BERT (uncased) | 87.004 ± 0.52        | 85.228 ± 0.90
+| Europeana ConvBERT       | **88.652** ± 0.75    | **87.284** ± 0.64
+| Europeana DistilBERT     | 85.004 ± 1.08        | 84.682 ± 0.65
+| Europeana ELECTRA        | 87.856 ± 0.76        | 86.064 ± 0.55
+| GBERT (base)             | 84.014 ± 1.08        | 83.004 ± 0.87
+| XLM-R (base)             | 83.942 ± 1.10        | 82.056 ± 0.84
+| mBERT (cased)            | 84.360 ± 0.71        | 83.064 ± 0.80
+
+![ONB Fine-tuned Development Results](figures/onb_ft_dev.png)
+![ONB Fine-tuned Test Results](figures/onb_ft_test.png)
+
+The current SOTA reported by Schweter and Baiter is 85.31% on test set.
 
 Notice: The ONB dataset covers texts from 1710 - 1873. The Europeana training dataset only contains little data for this specific
 time period. We are currently working on BERT models with other training data for this period!
