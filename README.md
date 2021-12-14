@@ -82,9 +82,9 @@ for training feature-based models and use different seeds for training 5 models.
 
 For the fine-tuned models we perform a hyper-parameter search over:
 
-* `batch_size`: [8, 16]
-* `epochs`: [5, 10]
-* `learning_rates`: [1e-5, 3e-5, 5e-5]
+* Batch Sizes: `[8, 16]`
+* Number of Epochs: `[5, 10]`
+* Learning Rates: `[1e-5, 3e-5, 5e-5]`
 
 Then we choose the best hyper-parameter configuration and train 5 models with different seeds and average F1-score over these models.
 
