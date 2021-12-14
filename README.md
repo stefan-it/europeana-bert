@@ -11,6 +11,7 @@ We are working on providing an alternative download mirror.
 
 # Changelog
 
+* 14.12.2021: Re-Evaluation of fine-tunes models (full hyper-parameter search)
 * 25.07.2021: Add fine-tuned evaluations results for various models
 * 06.02.2021: Public release of German Europeana DistilBERT and ConvBERT models
 * 16.11.2020: Public release of French Europeana BERT and ELECTRA models
@@ -82,7 +83,7 @@ for training feature-based models and use different seeds for training 5 models.
 For the fine-tuned models we perform a hyper-parameter search over:
 
 * `batch_size`: [8, 16]
-* `epochs`: [1, 5, 10]
+* `epochs`: [5, 10]
 * `learning_rates`: [1e-5, 3e-5, 5e-5]
 
 Then we choose the best hyper-parameter configuration and train 5 models with different seeds and average F1-score over these models.
@@ -112,19 +113,18 @@ on GitHub!
 ![LFT Feature-based Development Results](figures/lft_fb_dev.png)
 ![LFT Feature-based Test Results](figures/lft_fb_test.png)
 
-#### Fine-based evaluation
+#### Fine-tuned evaluation
 
 | Model                    | Development F1-score | Test F1-score
 | ------------------------ | -------------------- | -----------------
-| DBMDZ German BERT        | 77.336 ± 0.53        | 77.544 ± 0.72
-| Europeana BERT (cased)   | 79.278 ± 0.60        | 79.734 ± 0.85
-| Europeana BERT (uncased) | 76.938 ± 0.53        | 77.984 ± 0.97
-| Europeana ConvBERT       | **80.550** ± 0.44    | **81.352** ± 1.54
-| Europeana DistilBERT     | 79.086 ± 0.54        | 77.606 ± 1.31
-| Europeana ELECTRA        | 79.914 ± 0.87        | 81.062 ± 0.80
-| GBERT (base)             | 76.984 ± 0.42        | 76.826 ± 0.47
-| XLM-R (base)             | 76.142 ± 0.46        | 75.898 ± 0.55
-| mBERT (cased)            | 77.804 ± 0.66        | 78.362 ± 0.74
+| DBMDZ German BERT        | 76.786 ± 0.61        | 77.654 ± 0.99
+| Europeana BERT (cased)   | 79.682 ± 0.52        | 80.568 ± 0.45
+| Europeana BERT (uncased) | 77.170 ± 0.40        | 78.474 ± 0.96
+| Europeana ConvBERT       | **80.212** ± 0.35    | **82.488** ± 0.70
+| Europeana DistilBERT     | 78.458 ± 0.24        | 77.732 ± 0.49
+| Europeana ELECTRA        | 79.830 ± 0.70        | 80.392 ± 0.68
+| XLM-R (base)             | 77.022 ± 0.40        | 75.274 ± 0.54
+| mBERT (cased)            | 77.742 ± 0.76        | 78.402 ± 0.52
 
 ![LFT Fine-tuned Development Results](figures/lft_ft_dev.png)
 ![LFT Fine-tuned Test Results](figures/lft_ft_test.png)
@@ -149,19 +149,18 @@ The current SOTA reported by Schweter and Baiter is 77.51% on test set.
 ![ONB Feature-based Development Results](figures/onb_fb_dev.png)
 ![ONB Feature-based Test Results](figures/onb_fb_test.png)
 
-#### Fine-based evaluation
+#### Fine-tunes evaluation
 
 | Model                    | Development F1-score | Test F1-score
 | ------------------------ | -------------------- | -----------------
-| DBMDZ German BERT        | 84.490 ± 0.57        | 82.966 ± 0.56
-| Europeana BERT (cased)   | 87.198 ± 0.40        | 85.282 ± 0.82
-| Europeana BERT (uncased) | 87.004 ± 0.52        | 85.228 ± 0.90
-| Europeana ConvBERT       | **88.652** ± 0.75    | **87.284** ± 0.64
-| Europeana DistilBERT     | 85.004 ± 1.08        | 84.682 ± 0.65
-| Europeana ELECTRA        | 87.856 ± 0.76        | 86.064 ± 0.55
-| GBERT (base)             | 84.014 ± 1.08        | 83.004 ± 0.87
-| XLM-R (base)             | 83.942 ± 1.10        | 82.056 ± 0.84
-| mBERT (cased)            | 84.360 ± 0.71        | 83.064 ± 0.80
+| DBMDZ German BERT        | 85.378 ± 0.59        | 83.510 ± 0.73
+| Europeana BERT (cased)   | 88.766 ± 1.10        | 85.730 ± 0.96
+| Europeana BERT (uncased) | 87.196 ± 0.44        | 85.462 ± 1.11
+| Europeana ConvBERT       | **88.998** ± 0.88    | **86.634** ± 1.07
+| Europeana DistilBERT     | 86.172 ± 0.49        | 85.712 ± 0.94
+| Europeana ELECTRA        | 88.236 ± 0.89        | 86.362 ± 1.04
+| XLM-R (base)             | 84.010 ± 0.29        | 81.532 ± 1.36
+| mBERT (cased)            | 84.416 ± 0.73        | 82.530 ± 1.63
 
 ![ONB Fine-tuned Development Results](figures/onb_ft_dev.png)
 ![ONB Fine-tuned Test Results](figures/onb_ft_test.png)
