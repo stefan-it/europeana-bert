@@ -80,19 +80,17 @@ def run_experiment(seed, batch_size, epoch, learning_rate, json_config):
     )
 
     # Trainer
-    trainer: ModelTrainer = ModelTrainer(tagger, corpus, optimizer=torch.optim.AdamW)
+    trainer: ModelTrainer = ModelTrainer(tagger, corpus)
 
-    from torch.optim.lr_scheduler import OneCycleLR
-
-    trainer.train(
+    trainer.fine_tune(
         f"histo-flert-fine-tuning-{task_name}-{hf_model}-bs{batch_size}-ws{context_size}-e{epoch}-lr{learning_rate}-layers{layers}-crf{use_crf}-{seed}",
         learning_rate=learning_rate,
         mini_batch_size=batch_size,
         max_epochs=epoch,
         shuffle=True,
-        scheduler=OneCycleLR,
         embeddings_storage_mode='none',
         weight_decay=0.,
+        use_final_model_for_eval=False,
     )
 
 if __name__ == "__main__":
